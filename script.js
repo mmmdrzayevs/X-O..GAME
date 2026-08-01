@@ -1,19 +1,11 @@
-const cells = [...document.querySelectorAll('.cell')];
-const boardEl = document.querySelector('#board');
-const turnEl = document.querySelector('#turn-switch');
-const statusEl = document.querySelector('#status');
-const scores = { X: 0, O: 0, draw: 0 };
-let board = Array(9).fill(''), current = 'X', finished = false, soundOn = true;
-const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-
-function tone(freq) { if (!soundOn) return; const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(), gain = ctx.createGain(); osc.frequency.value = freq; gain.gain.setValueAtTime(.055, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .13); osc.connect(gain).connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + .13); }
-function updateTurn() { const oTurn = current === 'O'; turnEl.classList.toggle('o-active', oTurn); boardEl.classList.toggle('o-turn', oTurn); statusEl.textContent = `${current}-ın sırasıdır — seçimini et!`; }
-function updateScores() { document.querySelector('#x-score').textContent = scores.X; document.querySelector('#o-score').textContent = scores.O; document.querySelector('#draw-score').textContent = scores.draw; }
-function checkGame() { const line = wins.find(([a,b,c]) => board[a] && board[a] === board[b] && board[a] === board[c]); if (line) { finished = true; line.forEach(i => cells[i].classList.add('winner')); scores[current]++; updateScores(); statusEl.textContent = `🎉 ${current} qalib gəldi! Möhtəşəm oynadın.`; boardEl.classList.add('finished'); tone(760); return; } if (board.every(Boolean)) { finished = true; scores.draw++; updateScores(); statusEl.textContent = '🤝 Heç-heçə! Bir raund da oynayın.'; boardEl.classList.add('finished'); tone(380); return; } current = current === 'X' ? 'O' : 'X'; updateTurn(); }
-function play(index) { if (finished || board[index]) return; board[index] = current; const cell = cells[index]; cell.textContent = current; cell.classList.add(current.toLowerCase(), 'pop'); cell.setAttribute('aria-label', `${index + 1}-ci xana: ${current}`); tone(current === 'X' ? 520 : 430); checkGame(); }
-function newRound() { board = Array(9).fill(''); current = 'X'; finished = false; cells.forEach(c => { c.textContent = ''; c.className = 'cell'; c.removeAttribute('aria-label'); }); boardEl.classList.remove('finished'); updateTurn(); statusEl.textContent = 'X başlayır — uğurlar!'; }
-cells.forEach(cell => cell.addEventListener('click', () => play(+cell.dataset.index)));
-document.querySelector('#new-round').addEventListener('click', newRound);
-document.querySelector('#reset-score').addEventListener('click', () => { scores.X = scores.O = scores.draw = 0; updateScores(); newRound(); });
-document.querySelector('#sound-toggle').addEventListener('click', e => { soundOn = !soundOn; e.currentTarget.textContent = soundOn ? '🔊 Səs açıq' : '🔇 Səs bağlı'; e.currentTarget.setAttribute('aria-pressed', soundOn); });
-updateTurn(); updateScores();
+const cells=[...document.querySelectorAll('.board button')],lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+let mode='',human='X',bot='O',current='X',state=Array(9).fill(''),ended=false,thinking=false,score={X:0,O:0,D:0};
+const $=s=>document.querySelector(s),board=$('#board');
+function reveal(id){['#lobby','#picker','#play'].forEach(x=>$(x).classList.toggle('hide',x!==id))}function toast(t){const x=$('#toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2200)}function scores(){$('#sx').textContent=score.X;$('#so').textContent=score.O;$('#sd').textContent=score.D}
+function turn(){let o=current==='O';$('#switch').classList.toggle('o',o);board.classList.toggle('o',o);$('#status').textContent=thinking?'🤖 AI düşünür...':mode==='ai'?(current===human?`Sənin sırandır: ${human}`:'AI-nin sırasıdır'):`${current}-ın sırasıdır — seçimini et!`}
+function round(){state=Array(9).fill('');current='X';ended=thinking=false;cells.forEach(c=>{c.textContent='';c.className=''});turn();if(mode==='ai'&&bot==='X')setTimeout(aiMove,550)}
+function start(m){mode=m;reveal('#play');round();toast(m==='two'?'👥 İki oyunçu dueli başladı!':'🤖 AI duelə hazırdır!')}
+function winner(s){return lines.find(([a,b,c])=>s[a]&&s[a]===s[b]&&s[a]===s[c])}
+function place(i,mark=current){if(ended||thinking||state[i])return;state[i]=mark;let c=cells[i];c.textContent=mark;c.classList.add(mark.toLowerCase(),'pop');let line=winner(state);if(line){ended=true;line.forEach(x=>cells[x].classList.add('win'));score[mark]++;scores();let text=mode==='ai'?(mark===human?'🎉 Sən qalib gəldin!':'🤖 AI qalib gəldi!'):`🎉 ${mark} qalib gəldi!`;$('#status').textContent=text;toast(text);return}if(state.every(Boolean)){ended=true;score.D++;scores();$('#status').textContent='🤝 Heç-heçə!';toast('🤝 Heç-heçə!');return}current=mark==='X'?'O':'X';turn();if(mode==='ai'&&current===bot)setTimeout(aiMove,450)}
+function aiMove(){if(ended)return;thinking=true;turn();setTimeout(()=>{let i=best();thinking=false;place(i,bot)},250)}function best(){let best=-Infinity,pick=0;for(let i=0;i<9;i++)if(!state[i]){state[i]=bot;let v=minimax(state,0,false);state[i]='';if(v>best){best=v;pick=i}}return pick}function minimax(s,d,max){let l=winner(s);if(l)return s[l[0]]===bot?10-d:d-10;if(s.every(Boolean))return 0;if(max){let b=-Infinity;for(let i=0;i<9;i++)if(!s[i]){s[i]=bot;b=Math.max(b,minimax(s,d+1,false));s[i]=''}return b}let b=Infinity;for(let i=0;i<9;i++)if(!s[i]){s[i]=human;b=Math.min(b,minimax(s,d+1,true));s[i]=''}return b}
+$('#two').onclick=()=>start('two');$('#ai').onclick=()=>reveal('#picker');$('#back').onclick=()=>reveal('#lobby');document.querySelectorAll('.symbol').forEach(x=>x.onclick=()=>{human=x.dataset.symbol;bot=human==='X'?'O':'X';start('ai')});cells.forEach(c=>c.onclick=()=>{if(mode!=='ai'||current===human)place(+c.dataset.i)});$('#round').onclick=round;$('#modes').onclick=()=>{score={X:0,O:0,D:0};scores();reveal('#lobby')};scores();
