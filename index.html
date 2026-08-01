@@ -1,56 +1,7 @@
 <!doctype html>
-<html lang="az">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>X & O GAME</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <main class="game-shell">
-    <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-    <section class="game-card" aria-label="X & O  GAME">
-      <p class="eyebrow"> X & O </p>
-      <h1>Said Mammadrzayev <span aria-hidden="true"></span></h1>
-      <p class="pro-label">PRO VERSION</p>
-
-      <div class="scoreboard" aria-label="Xallar">
-        <div class="score score-x"><span>X</span><small>QALİBİYYƏT</small><strong id="x-score">0</strong></div>
-        <div class="score score-draw"><span>—</span><small>HEÇ-HEÇƏ</small><strong id="draw-score">0</strong></div>
-        <div class="score score-o"><span>O</span><small>QALİBİYYƏT</small><strong id="o-score">0</strong></div>
-      </div>
-
-      <div class="turn-area">
-        <span class="turn-title">SIRA</span>
-        <div class="turn-switch" id="turn-switch" aria-live="polite">
-          <span class="turn-player x-turn">X</span><span class="turn-player o-turn">O</span>
-        </div>
-        <p id="status">X başlayır — uğurlar!</p>
-      </div>
-
-      <div class="board" id="board" role="grid" aria-label="Oyun taxtası">
-        <button class="cell" data-index="0" role="gridcell" aria-label="1-ci xana"></button>
-        <button class="cell" data-index="1" role="gridcell" aria-label="2-ci xana"></button>
-        <button class="cell" data-index="2" role="gridcell" aria-label="3-cü xana"></button>
-        <button class="cell" data-index="3" role="gridcell" aria-label="4-cü xana"></button>
-        <button class="cell" data-index="4" role="gridcell" aria-label="5-ci xana"></button>
-        <button class="cell" data-index="5" role="gridcell" aria-label="6-cı xana"></button>
-        <button class="cell" data-index="6" role="gridcell" aria-label="7-ci xana"></button>
-        <button class="cell" data-index="7" role="gridcell" aria-label="8-ci xana"></button>
-        <button class="cell" data-index="8" role="gridcell" aria-label="9-cu xana"></button>
-      </div>
-
-      <div class="actions">
-        <button class="primary-btn" id="new-round">↻ Yeni raund</button>
-        <button class="ghost-btn" id="reset-score">Xalları sıfırla</button>
-        <button class="sound-btn" id="sound-toggle" aria-pressed="true">🔊 Səs açıq</button>
-      </div>
-      <p class="tip">İpucu: boş xanaya kliklə — rəng növbədə olan oyunçuya görə dəyişir.</p>
-    </section>
-  </main>
-  <script src="script.js"></script>
-</body>
-</html>
+<html lang="az"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>X & O GAME</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head>
+<body><main class="shell"><i class="orb pink-orb"></i><i class="orb blue-orb"></i><section class="card"><header><p>X & O ARENA </p><h1>Said Mammadrzayev <span>😎</span></h1></header>
+<section id="lobby" class="stage"><div class="marks"><b>X</b><em>O</em></div><h2>Necə oynamaq istəyirsən?</h2><p>Rejimi seç və arenaya daxil ol.</p><div class="modes"><button id="two" class="mode pink"><strong>👥</strong><b>İki oyunçu</b><small>Eyni ekranda canlı duel</small><i>→</i></button><button id="ai" class="mode blue"><strong>🤖</strong><b>AI-yə qarşı</b><small>Zəkalı botla mübarizə</small><i>→</i></button></div><small class="tip">✦ Seçimdən sonra oyun başlayır</small></section>
+<section id="picker" class="stage hide"><button id="back" class="back">← Geri</button><div class="robot">🤖</div><p class="eyebrow">AI İLƏ DUEL</p><h2>Hansı simvolu seçirsən?</h2><p>Sən seç, AI digər simvolla oynasın.</p><div class="symbols"><button data-symbol="X" class="symbol pink"><strong>X</strong><b>X ilə oyna</b><small>İlk gediş sənin</small></button><button data-symbol="O" class="symbol blue"><strong>O</strong><b>O ilə oyna</b><small>AI başlayacaq</small></button></div></section>
+<section id="play" class="hide"><div class="scores"><div class="score x"><b>X</b><small>QALİBİYYƏT</small><strong id="sx">0</strong></div><div class="score"><b>—</b><small>HEÇ-HEÇƏ</small><strong id="sd">0</strong></div><div class="score o"><b>O</b><small>QALİBİYYƏT</small><strong id="so">0</strong></div></div><div class="turn"><b>SIRA</b><div id="switch"><span>X</span><span>O</span></div><p id="status">X başlayır!</p></div><div id="board" class="board"><button data-i="0"></button><button data-i="1"></button><button data-i="2"></button><button data-i="3"></button><button data-i="4"></button><button data-i="5"></button><button data-i="6"></button><button data-i="7"></button><button data-i="8"></button></div><div class="actions"><button id="round">↻ Yeni raund</button><button id="modes">⌂ Rejimi dəyiş</button></div></section>
+</section></main><div id="toast"></div><script src="script.js"></script></body></html>
