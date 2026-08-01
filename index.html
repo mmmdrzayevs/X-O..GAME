@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X & O GAME</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+    <section class="game-card" aria-label="X & O  GAME">
+      <p class="eyebrow"> X & O </p>
+      <h1>Said Mammadrzayev <span aria-hidden="true">💲</span></h1>
+      <p class="pro-label">PRO VERSION</p>
+
+      <div class="scoreboard" aria-label="Xallar">
+        <div class="score score-x"><span>X</span><small>QALİBİYYƏT</small><strong id="x-score">0</strong></div>
+        <div class="score score-draw"><span>—</span><small>HEÇ-HEÇƏ</small><strong id="draw-score">0</strong></div>
+        <div class="score score-o"><span>O</span><small>QALİBİYYƏT</small><strong id="o-score">0</strong></div>
+      </div>
+
+      <div class="turn-area">
+        <span class="turn-title">SIRA</span>
+        <div class="turn-switch" id="turn-switch" aria-live="polite">
+          <span class="turn-player x-turn">X</span><span class="turn-player o-turn">O</span>
+        </div>
+        <p id="status">X başlayır — uğurlar!</p>
+      </div>
+
+      <div class="board" id="board" role="grid" aria-label="Oyun taxtası">
+        <button class="cell" data-index="0" role="gridcell" aria-label="1-ci xana"></button>
+        <button class="cell" data-index="1" role="gridcell" aria-label="2-ci xana"></button>
+        <button class="cell" data-index="2" role="gridcell" aria-label="3-cü xana"></button>
+        <button class="cell" data-index="3" role="gridcell" aria-label="4-cü xana"></button>
+        <button class="cell" data-index="4" role="gridcell" aria-label="5-ci xana"></button>
+        <button class="cell" data-index="5" role="gridcell" aria-label="6-cı xana"></button>
+        <button class="cell" data-index="6" role="gridcell" aria-label="7-ci xana"></button>
+        <button class="cell" data-index="7" role="gridcell" aria-label="8-ci xana"></button>
+        <button class="cell" data-index="8" role="gridcell" aria-label="9-cu xana"></button>
+      </div>
+
+      <div class="actions">
+        <button class="primary-btn" id="new-round">↻ Yeni raund</button>
+        <button class="ghost-btn" id="reset-score">Xalları sıfırla</button>
+        <button class="sound-btn" id="sound-toggle" aria-pressed="true">🔊 Səs açıq</button>
+      </div>
+      <p class="tip">İpucu: boş xanaya kliklə — rəng növbədə olan oyunçuya görə dəyişir.</p>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
